@@ -44,7 +44,7 @@ def run_analytics(df, X_scaled):
     print("\n--- 2. RUN CLUSTERING & ANOMALY DETECTION ---")
     
     # K-Means
-    kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
+    kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
     df["cluster"] = kmeans.fit_predict(X_scaled)
     joblib.dump(kmeans, f"{MODEL_DIR}/kmeans.pkl")
     
@@ -127,9 +127,8 @@ def post_processing(df):
     
     cluster_label = {
         sorted_clusters[0]: "Mandiri Fiskal",
-        sorted_clusters[1]: "Fiskal Menengah Tinggi",
-        sorted_clusters[2]: "Fiskal Menengah Rendah",
-        sorted_clusters[3]: "Sangat Tergantung Pusat"
+        sorted_clusters[1]: "Fiskal Menengah",
+        sorted_clusters[2]: "Tergantung Pusat"
     }
             
     df["cluster_label"] = df["cluster"].map(cluster_label)
@@ -138,9 +137,8 @@ def post_processing(df):
     cluster_summary.index = cluster_summary.index.map(cluster_label)
     cluster_summary = cluster_summary.reindex([
         "Mandiri Fiskal",
-        "Fiskal Menengah Tinggi",
-        "Fiskal Menengah Rendah",
-        "Sangat Tergantung Pusat"
+        "Fiskal Menengah",
+        "Tergantung Pusat"
     ])
     
     print("\nTOP 5 FISCAL SCORE:")
